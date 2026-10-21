@@ -1,0 +1,200 @@
+// MemPurge - ui/MemPurge.rc  (UTF-8)
+#pragma code_page(65001)
+
+#include "resource.h"
+#include <winres.h>
+#include <commctrl.h>
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+/////////////////////////////////////////////////////////////////////////////
+// Icon
+
+IDR_MAINFRAME           ICON                    "res\\MemPurge.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+// Version
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Ramesh Mokkapati"
+            VALUE "FileDescription", "MemPurge memory optimizer"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "MemPurge.exe"
+            VALUE "LegalCopyright", "Copyright (c) 2026 Ramesh Mokkapati. MIT License."
+            VALUE "OriginalFilename", "MemPurge.exe"
+            VALUE "ProductName", "MemPurge"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Menus
+
+IDR_TRAYMENU MENU
+BEGIN
+    POPUP "Tray"
+    BEGIN
+        MENUITEM "&Optimize",                   ID_TRAY_OPTIMIZE
+        MENUITEM "&Show",                       ID_TRAY_SHOW
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_TRAY_EXIT
+    END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Dialogs
+
+IDD_MAIN DIALOGEX 0, 0, 320, 252
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPCHILDREN
+EXSTYLE WS_EX_APPWINDOW | WS_EX_CONTROLPARENT
+CAPTION "MemPurge"
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_TAB,"SysTabControl32",WS_TABSTOP | WS_CLIPSIBLINGS,7,7,306,238
+END
+
+IDD_PAGE_MEMORY DIALOGEX 0, 0, 296, 214
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT           "",IDC_PHYS_TEXT,7,7,282,9
+    CONTROL         "",IDC_PHYS_BAR,"msctls_progress32",WS_BORDER,7,18,282,10
+    LTEXT           "",IDC_COMMIT_TEXT,7,33,282,9
+    CONTROL         "",IDC_COMMIT_BAR,"msctls_progress32",WS_BORDER,7,44,282,10
+    GROUPBOX        "Memory areas",IDC_STATIC,7,60,282,112
+    AUTOCHECKBOX    "Working set",IDC_AREA_WORKINGSET,15,72,266,10,WS_GROUP | WS_TABSTOP
+    AUTOCHECKBOX    "System file cache",IDC_AREA_SYSTEMFILECACHE,15,84,266,10,WS_TABSTOP
+    AUTOCHECKBOX    "Modified page list",IDC_AREA_MODIFIEDPAGELIST,15,96,266,10,WS_TABSTOP
+    AUTOCHECKBOX    "Standby list",IDC_AREA_STANDBYLIST,15,108,266,10,WS_TABSTOP
+    AUTOCHECKBOX    "Standby list (low priority only)",IDC_AREA_STANDBYLOW,15,120,266,10,WS_TABSTOP
+    AUTOCHECKBOX    "Combined page list",IDC_AREA_COMBINEDPAGELIST,15,132,266,10,WS_TABSTOP
+    AUTOCHECKBOX    "Registry cache",IDC_AREA_REGISTRYCACHE,15,144,266,10,WS_TABSTOP
+    AUTOCHECKBOX    "Modified file cache",IDC_AREA_MODIFIEDFILECACHE,15,156,266,10,WS_TABSTOP
+    PUSHBUTTON      "&Optimize",IDC_OPTIMIZE,7,180,70,16,WS_GROUP
+    LTEXT           "",IDC_STATUS,84,184,150,18
+    PUSHBUTTON      "&Details…",IDC_DETAILS,239,180,50,16,NOT WS_VISIBLE
+END
+
+IDD_PAGE_SETTINGS DIALOGEX 0, 0, 296, 214
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT           "Auto-optimize every",IDC_STATIC,7,9,100,8
+    EDITTEXT        IDC_INTERVAL_EDIT,150,7,36,12,ES_NUMBER | ES_AUTOHSCROLL
+    CONTROL         "",IDC_INTERVAL_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,186,7,10,12
+    LTEXT           "hours (0 = off)",IDC_STATIC,192,9,97,8
+    LTEXT           "Auto-optimize when free memory is below",IDC_STATIC,7,25,140,8
+    EDITTEXT        IDC_LOWMEM_EDIT,150,23,36,12,ES_NUMBER | ES_AUTOHSCROLL
+    CONTROL         "",IDC_LOWMEM_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,186,23,10,12
+    LTEXT           "% (0 = off)",IDC_STATIC,192,25,97,8
+    AUTOCHECKBOX    "Global hotkey",IDC_HOTKEY_ENABLE,7,41,100,10,WS_TABSTOP
+    CONTROL         "",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,150,40,100,12
+    LTEXT           "",IDC_HOTKEY_WARNING,7,54,282,16,NOT WS_VISIBLE
+    AUTOCHECKBOX    "Run on startup",IDC_RUN_ON_STARTUP,7,72,140,10,WS_TABSTOP
+    AUTOCHECKBOX    "Start minimized",IDC_START_MINIMIZED,7,84,140,10,WS_TABSTOP
+    AUTOCHECKBOX    "Close to notification area",IDC_CLOSE_TO_TRAY,7,96,140,10,WS_TABSTOP
+    AUTOCHECKBOX    "Always on top",IDC_ALWAYS_ON_TOP,7,108,140,10,WS_TABSTOP
+    AUTOCHECKBOX    "Show optimization notifications",IDC_SHOW_NOTIFICATIONS,7,120,140,10,WS_TABSTOP
+    AUTOCHECKBOX    "Show virtual memory",IDC_SHOW_VIRTUAL,150,72,139,10,WS_TABSTOP
+    AUTOCHECKBOX    "Run optimization at low priority",IDC_LOW_PRIORITY,150,84,139,10,WS_TABSTOP
+    AUTOCHECKBOX    "Optimize on tray middle-click",IDC_MIDDLE_CLICK,150,96,139,10,WS_TABSTOP
+    AUTOCHECKBOX    "Show usage % in tray icon",IDC_TRAY_USAGE,150,108,139,10,WS_TABSTOP
+    LTEXT           "Tray warning level",IDC_STATIC,7,142,100,8
+    EDITTEXT        IDC_WARNING_EDIT,150,140,36,12,ES_NUMBER | ES_AUTOHSCROLL
+    CONTROL         "",IDC_WARNING_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,186,140,10,12
+    LTEXT           "%",IDC_STATIC,192,142,20,8
+    LTEXT           "Tray danger level",IDC_STATIC,7,158,100,8
+    EDITTEXT        IDC_DANGER_EDIT,150,156,36,12,ES_NUMBER | ES_AUTOHSCROLL
+    CONTROL         "",IDC_DANGER_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,186,156,10,12
+    LTEXT           "%",IDC_STATIC,192,158,20,8
+    PUSHBUTTON      "&Reset to defaults",IDC_RESET,7,190,80,16
+END
+
+IDD_PAGE_EXCLUSIONS DIALOGEX 0, 0, 296, 214
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    LTEXT           "Processes excluded from working set trimming:",IDC_STATIC,7,7,282,8
+    LISTBOX         IDC_EXCL_LIST,7,19,282,150,LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_EXCL_COMBO,7,177,180,120,CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&Add",IDC_EXCL_ADD,192,176,46,14
+    PUSHBUTTON      "&Remove",IDC_EXCL_REMOVE,243,176,46,14
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Strings
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE               "MemPurge"
+    IDS_TAB_MEMORY              "Memory"
+    IDS_TAB_SETTINGS            "Settings"
+    IDS_TAB_EXCLUSIONS          "Exclusions"
+
+    IDS_AREA_WORKINGSET         "Working set"
+    IDS_AREA_SYSTEMFILECACHE    "System file cache"
+    IDS_AREA_MODIFIEDPAGELIST   "Modified page list"
+    IDS_AREA_STANDBYLIST        "Standby list"
+    IDS_AREA_STANDBYLOW         "Standby list (low priority)"
+    IDS_AREA_COMBINEDPAGELIST   "Combined page list"
+    IDS_AREA_REGISTRYCACHE      "Registry cache"
+    IDS_AREA_MODIFIEDFILECACHE  "Modified file cache"
+
+    IDS_STATUS_SUCCESS          "Success"
+    IDS_STATUS_NOTSUPPORTED     "Not supported on this Windows version"
+    IDS_STATUS_PRIVILEGE        "Privilege missing"
+    IDS_STATUS_FAILED           "Failed"
+
+    IDS_PHYS_FMT                "Physical memory: Used %s of %s (%u%%)"
+    IDS_COMMIT_FMT              "Virtual memory: Used %s of %s (%u%%)"
+    IDS_OPTIMIZING_FMT          "Optimizing %s (%u/%u)…"
+    IDS_FREED_FMT               "Freed %s in %.1f s"
+    IDS_DETAILS_TITLE           "MemPurge — Optimization details"
+    IDS_RESULT_LINE_FMT         "%s: %s"
+    IDS_RESULT_LINE_ERR_FMT     "%s: %s (error %lu: %s)"
+    IDS_OS_FMT                  "Windows %u.%u (build %u)"
+    IDS_TOOLTIP_FMT             "MemPurge — Memory used: %u%%"
+    IDS_NOTIFY_FMT              "Freed %s (reason: %s)"
+    IDS_READY                   "Ready"
+
+    IDS_REASON_MANUAL           "Manual"
+    IDS_REASON_HOTKEY           "Hotkey"
+    IDS_REASON_INTERVAL         "Interval"
+    IDS_REASON_LOWMEMORY        "Low memory"
+    IDS_REASON_TRAY             "Tray"
+
+    IDS_HOTKEY_FAILED           "The hotkey could not be registered. It may already be in use by another program."
+    IDS_STARTUP_FAILED_FMT      "The startup task could not be updated (0x%08X): %s"
+    IDS_SETTINGS_SAVE_FAILED    "The settings could not be saved to the registry."
+
+    IDS_CLI_FREED_FMT           "Freed: %s"
+    IDS_USAGE                   "MemPurge - frees RAM by trimming working sets and purging memory caches.\n\nUsage: MemPurge.exe [area switches] [/Minimized] [/?]\n\nArea switches (any one runs MemPurge without a window):\n  /WorkingSet              Trim the working sets of processes\n  /SystemFileCache         Flush the system file cache\n  /ModifiedPageList        Write modified pages to disk\n  /StandbyList             Purge the standby list\n  /StandbyListLowPriority  Purge low-priority standby pages only\n  /CombinedPageList        Flush the combined page list\n  /RegistryCache           Flush registry hives\n  /ModifiedFileCache       Commit pending writes on fixed volumes\n\nOther switches:\n  /Minimized               Start in the notification area only\n  /? or /Help              Show this help\n\nSwitches are case-insensitive and may start with / or -.\nExit codes: 0 = all areas succeeded, 1 = an area failed or is not supported, 2 = invalid switch."
+    IDS_UNKNOWN_SWITCH_FMT      "Unknown switch: %s"
+
+    IDS_UNIT_B                  "B"
+    IDS_UNIT_KB                 "KB"
+    IDS_UNIT_MB                 "MB"
+    IDS_UNIT_GB                 "GB"
+    IDS_UNIT_TB                 "TB"
+END

@@ -1,0 +1,61 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.configuration }} ${{ matrix.platform }}
+    # Visual Studio 2022 with the C++ ATL/MFC component (needed for MFC) and the v143 toolset.
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [ Debug, Release ]
+        platform: [ x64, x86 ]
+        include:
+          # The solution platform x86 builds the projects' Win32 platform, which is the
+          # folder name under bin\.
+          - platform: x64
+            outdir: x64
+          - platform: x86
+            outdir: Win32
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3
+        with:
+          vs-version: '[17.0,18.0)'
+
+      # -warnaserror turns every compiler (/W4), linker, resource-compiler and MSBuild
+      # warning into an error, so a green run means zero warnings.
+      - name: Build
+        run: >
+          msbuild MemPurge.sln
+          /t:Rebuild
+          /p:Configuration=${{ matrix.configuration }}
+          /p:Platform=${{ matrix.platform }}
+          /m /nologo /v:minimal
+          -warnaserror
+
+      # The tests link only pure helpers and never perform a memory operation, so they are
+      # safe to run unelevated on the runner. MemPurge.exe itself is never launched.
+      - name: Test
+        run: bin\${{ matrix.outdir }}\${{ matrix.configuration }}\MemPurgeTests.exe
+
+      - name: Upload MemPurge.exe
+        if: matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v7
+        with:
+          name: MemPurge-${{ matrix.platform }}
+          path: bin/${{ matrix.outdir }}/Release/MemPurge.exe
+          if-no-files-found: error

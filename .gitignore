@@ -1,0 +1,11 @@
+# Build output (next to MemPurge.sln)
+/bin/
+/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.aps
+*.VC.db
+*.VC.opendb
+ipch/

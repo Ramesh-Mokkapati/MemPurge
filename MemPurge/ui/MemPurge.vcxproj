@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{9FF4A363-8E2B-49FD-8945-2058C7219280}</ProjectGuid>
+    <Keyword>MFCProj</Keyword>
+    <RootNamespace>MemPurge</RootNamespace>
+    <ProjectName>MemPurge</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Common.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <TargetName>MemPurge</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>psapi.lib;taskschd.lib;secur32.lib;uxtheme.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <!-- requireAdministrator comes from MemPurge.manifest (single source). -->
+      <EnableUAC>false</EnableUAC>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>$(ProjectDir)MemPurge.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!-- engine: plain Win32 + STL, no MFC -->
+    <ClCompile Include="..\engine\Areas.cpp" />
+    <ClCompile Include="..\engine\LowPriorityScope.cpp" />
+    <ClCompile Include="..\engine\MemoryStatus.cpp" />
+    <ClCompile Include="..\engine\NtApi.cpp" />
+    <ClCompile Include="..\engine\Optimizer.cpp" />
+    <ClCompile Include="..\engine\OsVersion.cpp" />
+    <ClCompile Include="..\engine\Privilege.cpp" />
+    <ClCompile Include="..\engine\Processes.cpp" />
+    <ClCompile Include="..\engine\ProcessName.cpp" />
+    <ClCompile Include="..\engine\RunResult.cpp" />
+    <ClCompile Include="..\engine\Status.cpp" />
+    <ClCompile Include="..\engine\UniqueHandle.cpp" />
+    <!-- core: no MFC -->
+    <ClCompile Include="..\core\Bstr.cpp" />
+    <ClCompile Include="..\core\CommandLine.cpp" />
+    <ClCompile Include="..\core\CommandLineOptions.cpp" />
+    <ClCompile Include="..\core\RegistryKey.cpp" />
+    <ClCompile Include="..\core\Settings.cpp" />
+    <ClCompile Include="..\core\SettingsStore.cpp" />
+    <ClCompile Include="..\core\SizeFormat.cpp" />
+    <ClCompile Include="..\core\StartupTask.cpp" />
+    <ClCompile Include="..\core\Variant.cpp" />
+    <!-- ui: MFC -->
+    <ClCompile Include="ExclusionsPage.cpp" />
+    <ClCompile Include="HotKeyEdit.cpp" />
+    <ClCompile Include="MainDlg.cpp" />
+    <ClCompile Include="MappedView.cpp" />
+    <ClCompile Include="MemoryDC.cpp" />
+    <ClCompile Include="MemoryPage.cpp" />
+    <ClCompile Include="MemPurgeApp.cpp" />
+    <ClCompile Include="PageBase.cpp" />
+    <ClCompile Include="ParentConsole.cpp" />
+    <ClCompile Include="ScreenDC.cpp" />
+    <ClCompile Include="SelectGuard.cpp" />
+    <ClCompile Include="SettingsPage.cpp" />
+    <ClCompile Include="SingleInstance.cpp" />
+    <ClCompile Include="TrayIcon.cpp" />
+    <ClCompile Include="UiText.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\engine\AreaResult.h" />
+    <ClInclude Include="..\engine\Areas.h" />
+    <ClInclude Include="..\engine\LowPriorityScope.h" />
+    <ClInclude Include="..\engine\MemoryCombineInformationEx.h" />
+    <ClInclude Include="..\engine\MemoryStatus.h" />
+    <ClInclude Include="..\engine\NtApi.h" />
+    <ClInclude Include="..\engine\Optimizer.h" />
+    <ClInclude Include="..\engine\OsVersion.h" />
+    <ClInclude Include="..\engine\Privilege.h" />
+    <ClInclude Include="..\engine\Processes.h" />
+    <ClInclude Include="..\engine\ProcessName.h" />
+    <ClInclude Include="..\engine\RunOptions.h" />
+    <ClInclude Include="..\engine\RunResult.h" />
+    <ClInclude Include="..\engine\Status.h" />
+    <ClInclude Include="..\engine\UniqueHandle.h" />
+    <ClInclude Include="..\core\Bstr.h" />
+    <ClInclude Include="..\core\CommandLine.h" />
+    <ClInclude Include="..\core\CommandLineOptions.h" />
+    <ClInclude Include="..\core\RegistryKey.h" />
+    <ClInclude Include="..\core\Settings.h" />
+    <ClInclude Include="..\core\SettingsStore.h" />
+    <ClInclude Include="..\core\SizeFormat.h" />
+    <ClInclude Include="..\core\StartupTask.h" />
+    <ClInclude Include="..\core\Variant.h" />
+    <ClInclude Include="ExclusionsPage.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="GdiObject.h" />
+    <ClInclude Include="HotKeyEdit.h" />
+    <ClInclude Include="MainDlg.h" />
+    <ClInclude Include="MappedView.h" />
+    <ClInclude Include="MemoryDC.h" />
+    <ClInclude Include="MemoryPage.h" />
+    <ClInclude Include="MemPurgeApp.h" />
+    <ClInclude Include="OptimizeReason.h" />
+    <ClInclude Include="PageBase.h" />
+    <ClInclude Include="ParentConsole.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ScreenDC.h" />
+    <ClInclude Include="SelectGuard.h" />
+    <ClInclude Include="SettingsPage.h" />
+    <ClInclude Include="SingleInstance.h" />
+    <ClInclude Include="TrayIcon.h" />
+    <ClInclude Include="TrayLevel.h" />
+    <ClInclude Include="UiText.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MemPurge.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MemPurge.ico" />
+    <Manifest Include="MemPurge.manifest" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
