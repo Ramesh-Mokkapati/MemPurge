@@ -6,6 +6,18 @@ memory caches, using only public Windows APIs.
 
 MemPurge requires administrator rights. Its manifest requests elevation (`requireAdministrator`).
 
+## Screenshots
+
+| Memory | Settings | Exclusions |
+|---|---|---|
+| ![Memory tab: physical memory usage and the memory areas to optimize](docs/screenshots/memory.png) | ![Settings tab: auto-optimize, hotkey, startup and tray options](docs/screenshots/settings.png) | ![Exclusions tab: processes skipped by working set trimming](docs/screenshots/exclusions.png) |
+
+- **Memory**: live physical memory usage (and commit memory, when enabled), the eight memory
+  areas, and the Optimize button.
+- **Settings**: automatic optimization by interval or low free memory, the global hotkey,
+  startup and window options, and the tray icon warning and danger levels.
+- **Exclusions**: processes that working-set trimming skips.
+
 ## Features
 
 - Eight memory areas, run in this order. Each one is optional, and a failing area does not stop
@@ -173,6 +185,10 @@ requests and on demand. It uses a `windows-2022` runner (Visual Studio 2022 with
 - runs `MemPurgeTests.exe` for each configuration (MemPurge.exe itself is never started)
 - uploads `MemPurge.exe` from each Release build as the `MemPurge-x64` and `MemPurge-x86`
   artifacts
+- on a push to `main` where every build and test passes, tags the commit `v1.0.<run number>`
+  and publishes a GitHub release with `MemPurge-x64.exe` and `MemPurge-x86.exe` and notes
+  generated from the commits since the previous release. To change the major or minor version,
+  edit `VERSION` in the workflow's `release` job.
 
 ## Layout
 
