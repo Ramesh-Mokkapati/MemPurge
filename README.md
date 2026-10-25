@@ -186,8 +186,9 @@ requests and on demand. It uses a `windows-2022` runner (Visual Studio 2022 with
 - uploads `MemPurge.exe` from each Release build as the `MemPurge-x64` and `MemPurge-x86`
   artifacts
 - on a push to `main` where every build and test passes, tags the commit `v1.0.<run number>`
-  and publishes a GitHub release with `MemPurge-x64.exe` and `MemPurge-x86.exe` and notes
-  generated from the commits since the previous release. To change the major or minor version,
+  and publishes a GitHub release with `MemPurge-<tag>-x64.zip` and `MemPurge-<tag>-x86.zip`
+  (each holding `MemPurge.exe`) and notes generated from the commits since the previous
+  release. The Deployments installer takes the x64 zip. To change the major or minor version,
   edit `VERSION` in the workflow's `release` job.
 
 ## Layout
